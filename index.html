@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N-HOPE 個別育成プログラム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #050505;
+      color: white;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    .bg-effects {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .glow1,
+    .glow2 {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.2;
+    }
+
+    .glow1 {
+      width: 500px;
+      height: 500px;
+      background: #facc15;
+      top: -100px;
+      left: 10%;
+    }
+
+    .glow2 {
+      width: 400px;
+      height: 400px;
+      background: orange;
+      bottom: -100px;
+      right: 10%;
+    }
+
+    section {
+      padding: 120px 24px;
+      position: relative;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: rgba(250,204,21,0.1);
+      border: 1px solid rgba(250,204,21,0.3);
+      color: #facc15;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    h1 {
+      font-size: clamp(52px, 9vw, 100px);
+      line-height: 1.05;
+      font-weight: 900;
+      margin-bottom: 32px;
+    }
+
+    .gold {
+      color: #facc15;
+    }
+
+    .hero p {
+      font-size: 22px;
+      color: #cfcfcf;
+      max-width: 800px;
+      margin-bottom: 48px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+
+    .btn {
+      padding: 18px 38px;
+      border-radius: 18px;
+      border: none;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-main {
+      background: linear-gradient(to right, #facc15, #eab308);
+      color: black;
+      box-shadow: 0 0 40px rgba(250,204,21,0.4);
+    }
+
+    .btn-main:hover {
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .btn-sub {
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(10px);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 32px;
+      backdrop-filter: blur(15px);
+      transition: .3s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(250,204,21,0.4);
+    }
+
+    .label {
+      color: #facc15;
+      font-size: 14px;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .big {
+      font-size: 32px;
+      font-weight: 900;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(40px, 6vw, 72px);
+      margin-bottom: 20px;
+      font-weight: 900;
+    }
+
+    .section-title p {
+      color: #aaa;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .problem-grid,
+    .feature-grid,
+    .result-grid,
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+      gap: 24px;
+    }
+
+    .problem,
+    .feature,
+    .result,
+    .flow {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 32px;
+      backdrop-filter: blur(14px);
+    }
+
+    .feature h3,
+    .result h3,
+    .flow h3 {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .pricing {
+      text-align: center;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid rgba(250,204,21,0.2);
+      border-radius: 40px;
+      padding: 80px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: rgba(250,204,21,0.15);
+      filter: blur(120px);
+      border-radius: 50%;
+      top: -100px;
+      right: -100px;
+    }
+
+    .price {
+      font-size: clamp(70px, 10vw, 120px);
+      font-weight: 900;
+      margin: 20px 0;
+      color: #facc15;
+    }
+
+    .cta {
+      text-align: center;
+      padding-bottom: 160px;
+    }
+
+    .cta h2 {
+      font-size: clamp(42px, 7vw, 84px);
+      margin-bottom: 30px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .cta p {
+      color: #ccc;
+      font-size: 22px;
+      max-width: 800px;
+      margin: auto auto 50px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: #777;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    @media(max-width:768px){
+      section {
+        padding: 80px 20px;
+      }
+
+      .hero p,
+      .cta p {
+        font-size: 18px;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .pricing {
+        padding: 60px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-effects">
+    <div class="glow1"></div>
+    <div class="glow2"></div>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">N-HOPE 個別育成プログラム</div>
+
+      <h1>
+        本気で<br>
+        <span class="gold">人生を変えたい人</span>へ。
+      </h1>
+
+      <p>
+        2ヶ月集中・完全マンツーマン指導。<br>
+        本気で結果を出したい人だけの特別プログラム。
+      </p>
+
+      <div class="buttons">
+        <a href="#apply" class="btn btn-main">今すぐ申し込む</a>
+        <a href="#details" class="btn btn-sub">詳細を見る</a>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="label">PROGRAM</div>
+          <div class="big">2ヶ月集中</div>
+        </div>
+
+        <div class="card">
+          <div class="label">SUPPORT</div>
+          <div class="big">毎日添削</div>
+        </div>
+
+        <div class="card">
+          <div class="label">LIMITED</div>
+          <div class="big">先着10名</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <div class="label">PROBLEM</div>
+        <h2>こんな悩みありませんか？</h2>
+        <p>配信を見るだけで終わってしまう。学んでいるのに結果に繋がらない。そんな悩みを抱える方へ。</p>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem">✔ 配信を見ても実際のトレードに落とし込めない</div>
+        <div class="problem">✔ 自己流になってしまう</div>
+        <div class="problem">✔ 損切りや利確に自信が持てない</div>
+        <div class="problem">✔ 継続的に勝てない</div>
+        <div class="problem">✔ 本気で学びたいのに環境がない</div>
+        <div class="problem">✔ 誰かに直接見てもらいたい</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="details">
+    <div class="container">
+      <div class="section-title">
+        <div class="label">WHY WE STARTED</div>
+        <h2>なぜ個別育成を始めるのか。</h2>
+      </div>
+
+      <div class="feature">
+        N-HOPEはこれまで、毎日のトレード配信・LIVE配信・グループコンサルなど、すべて無料で提供してきました。<br><br>
+
+        その中で多くいただいていたのが、
+        「個別で見てほしい」「もっと深く学びたい」という声。
+
+        だからこそ今回、本気で結果を出したい人へ向けて、僕ら自身もより時間と責任をかけて向き合う環境を作る決断をしました。
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <div class="label">FEATURES</div>
+        <h2>プログラム内容</h2>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature">
+          <h3>週1回コンサル</h3>
+          <p>2ヶ月で全8回の個別セッション。</p>
+        </div>
+
+        <div class="feature">
+          <h3>完全マンツーマン</h3>
+          <p>あなた専用のカリキュラム設計。</p>
+        </div>
+
+        <div class="feature">
+          <h3>毎日添削サポート</h3>
+          <p>日々のトレードを徹底サポート。</p>
+        </div>
+
+        <div class="feature">
+          <h3>ロードマップ構築</h3>
+          <p>最短距離で成長するための環境。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="pricing">
+        <div class="label">LIMITED OFFER</div>
+
+        <div class="price">¥50,000</div>
+
+        <p>
+          2ヶ月集中 個別育成プログラム<br>
+          ※税込 / USDT支払い対応
+        </p>
+
+        <br><br>
+
+        <a href="#apply" class="btn btn-main">申し込みフォームへ進む</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="apply">
+    <div class="container">
+      <h2>
+        次に変わるのは、<br>
+        あなたかもしれません。
+      </h2>
+
+      <p>
+        本気で人生を変えたい。<br>
+        本気で結果を出したい。<br><br>
+
+        その覚悟がある方を、
+        僕らも本気でサポートします。
+      </p>
+
+      <a href="https://forms.gle/" class="btn btn-main">
+        今すぐ参加する
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    © N-HOPE All Rights Reserved.
+  </footer>
+
+</body>
+</html>
